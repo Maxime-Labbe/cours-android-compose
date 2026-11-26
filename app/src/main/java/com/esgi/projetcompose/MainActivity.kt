@@ -1,6 +1,7 @@
 package com.esgi.projetcompose
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +18,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val TAG : String = "CAMPUS"
+        // val capacity: Int = "12" -> Initializer type mismatch: expected 'Int', actual 'String'.
+        // val capacity: Int = "douze".toInt() -> java.lang.NumberFormatException: For input string: "douze"
+        val capacity: Int = "douze".toIntOrNull()?: 0
+
+        Log.d(TAG, "Places : $capacity")
         setContent {
             Projet_composeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
