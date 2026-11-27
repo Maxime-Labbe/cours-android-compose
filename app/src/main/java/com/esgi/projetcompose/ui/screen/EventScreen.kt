@@ -1,6 +1,7 @@
 package com.esgi.projetcompose.ui.screen
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndSelectAll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -30,6 +32,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,10 +50,10 @@ fun EventListScreen(events: List<Event>) {
     val queryState = rememberTextFieldState()
     var selectedCategories by rememberSaveable { mutableStateOf(listOf<String>()) }
     var favoriteEventsId by rememberSaveable { mutableStateOf(listOf<Int>()) }
-    val favoriteEvents = events.filter { favoriteEventsId.contains(it.id) }
     val visibleEvents = events.filter {
         it.title.contains(queryState.text, ignoreCase = true)
                 && (selectedCategories.isEmpty() || selectedCategories.contains(it.category))  }
+    val favoriteEvents = visibleEvents.filter { favoriteEventsId.contains(it.id) }
     Scaffold(
         topBar = {
             TopAppBar(title= { Text("Campus")})
@@ -70,7 +74,8 @@ fun EventListScreen(events: List<Event>) {
             LazyColumn {
                 item {
                     CategoryRow(
-                        categories = visibleEvents.map { it.category }.distinct(),
+                        categories = events.map { it.category }.distinct(),
+                        selectedCategories,
                         onCategorySelect = { selectedCategories = if (selectedCategories.contains(it)) selectedCategories - it else selectedCategories + it },
                         modifier = Modifier
                     )
@@ -83,7 +88,7 @@ fun EventListScreen(events: List<Event>) {
                         )
                     }
 
-                    items(events.filter { favoriteEventsId.contains(it.id) }) {
+                    items(visibleEvents.filter { favoriteEventsId.contains(it.id) }) {
                         EventCard(
                             it,
                             favoriteEventsId.contains(it.id),
@@ -103,7 +108,7 @@ fun EventListScreen(events: List<Event>) {
                         )
                     }
                 }
-                items(events.filter { !favoriteEventsId.contains(it.id) }) {
+                items(visibleEvents.filter { !favoriteEventsId.contains(it.id) }) {
                     EventCard(
                         it,
                         favoriteEventsId.contains(it.id),
@@ -139,7 +144,7 @@ fun SearchField(state: TextFieldState, modifier: Modifier) {
 }
 
 @Composable
-fun CategoryRow(categories: List<String>, onCategorySelect: (String) -> Unit, modifier: Modifier) {
+fun CategoryRow(categories: List<String>, selectedCategories: List<String>, onCategorySelect: (String) -> Unit, modifier: Modifier) {
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
@@ -148,7 +153,8 @@ fun CategoryRow(categories: List<String>, onCategorySelect: (String) -> Unit, mo
     ) {
         items(categories) {
             Button(
-                onClick = { onCategorySelect(it) }
+                onClick = { onCategorySelect(it) },
+                colors = if (selectedCategories.contains(it) || selectedCategories.isEmpty()) ButtonDefaults.buttonColors() else ButtonDefaults.buttonColors(Color.Gray)
             ) {
                 Text(it)
             }
