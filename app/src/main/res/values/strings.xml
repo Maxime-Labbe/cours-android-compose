@@ -2,9 +2,17 @@
     <string name="app_name">projet_compose</string>
     <string name="unconfirmed_place">Lieu à confirmer</string>
     <string name="book">Réserver</string>
+    <string name="see_details">Voir les détails</string>
     <plurals name="number_of_places">
         <item quantity="one">%d place restante</item>
         <item quantity="other">%d places restantes</item>
     </plurals>
     <string name="event_image_details">Image de l\'événement</string>
+    <string name="search_event">Rechercher un événement</string>
+    <plurals name="events_search_results">
+        <item quantity="one">%d événement trouvé</item>
+        <item quantity="other">%d événements trouvés</item>
+    </plurals>
+    <string name="favorites">Favoris</string>
+    <string name="other_events">Autres événements</string>
 </resources>
