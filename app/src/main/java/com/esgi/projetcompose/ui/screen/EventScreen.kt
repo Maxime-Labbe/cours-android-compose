@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -33,6 +34,16 @@ fun EventListScreen(events: List<Event>) {
         }
     ) { innerPadding ->
         LazyColumn(contentPadding = innerPadding) {
+            item {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(events.map { it.category }.distinct()) {
+                        Text(it)
+                    }
+                }
+            }
             items(events)  {
                 EventCard(
                     it,

@@ -20,8 +20,8 @@ class MainActivity : ComponentActivity() {
         val event5: Event = Event(5, "titre", "","catégorie", "lieu", 10)
         val events: List<Event> = listOf(event1, event2, event3, event4, event5);
         setContent {
-           // EventListScreen(events)
-            EventDetailScreen(event1, { }, Modifier)
+            EventListScreen(events)
+        // EventDetailScreen(event1, { }, Modifier)
         }
     }
 }
